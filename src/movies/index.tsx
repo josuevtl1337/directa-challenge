@@ -1,9 +1,15 @@
 import type { Movie } from "./types/movies";
 import Filter from "./components/filter";
 import { useAllMovies } from "./hooks/useAllMovies";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import SearchBar from "./components/search-bar";
-
 
 const MoviesPage = () => {
   const { allMovies, isLoading, isError } = useAllMovies();
@@ -40,10 +46,12 @@ type MoviesCardProps = {
 };
 
 const MoviesCard = ({ movieDetail }: MoviesCardProps) => {
-  const trimGenres = movieDetail.Genre ? movieDetail.Genre.split(",").map(g => g.trim()) : [];
+  const trimGenres = movieDetail.Genre
+    ? movieDetail.Genre.split(",").map((g) => g.trim())
+    : [];
 
   return (
-    <Card className="min-h-[180px] flex flex-col justify-between rounded">
+    <Card className="min-h-[150px] flex flex-col justify-between rounded-2xl hover:scale-3d transition-all  cursor-pointer">
       <div>
         <CardHeader className="pb-2">
           <CardTitle className="text-center text-base md:text-xl font-semibold leading-tight text-foreground">
@@ -70,7 +78,12 @@ const MoviesCard = ({ movieDetail }: MoviesCardProps) => {
       </div>
 
       <CardFooter className="pt-3">
-        <p className="text-sm text-muted-foreground">Directed by <span className="font-medium text-foreground">{movieDetail.Director}</span></p>
+        <p className="text-sm text-muted-foreground">
+          Directed by{" "}
+          <span className="font-medium text-foreground">
+            {movieDetail.Director}
+          </span>
+        </p>
       </CardFooter>
     </Card>
   );
