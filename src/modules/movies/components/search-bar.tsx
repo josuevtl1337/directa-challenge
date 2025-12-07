@@ -28,7 +28,7 @@ const SearchBar: React.FC<ISearchBarProps> = ({ onSearchChange }) => {
     <div>
       <InputGroup className="rounded-full max-w-350 w-full mb-4 p-6 ">
         <InputGroupInput
-          placeholder="Title..."
+          placeholder="Search by Title..."
           value={searchTerm}
           onChange={handleSearchChange}
         />

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { fetchMoviesPage } from "../modules/movies/api/movies";
 import type { Movie, MoviesApiResponse } from "../modules/movies/types/movies";
 
@@ -8,15 +8,11 @@ type MoviesState = {
   isError: string | null;
 };
 
-const defaultState: MoviesState = {
-  allMovies: [],
-  isLoading: true,
-  isError: null,
-};
-
 const MoviesContext = createContext<MoviesState | undefined>(undefined);
 
-export const MoviesProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+export const MoviesProvider: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState<string | null>(null);
@@ -74,13 +70,5 @@ export const MoviesProvider: React.FC<React.PropsWithChildren<unknown>> = ({ chi
     </MoviesContext.Provider>
   );
 };
-
-export function useMoviesContext() {
-  const ctx = useContext(MoviesContext);
-  if (!ctx) {
-    throw new Error("useMoviesContext must be used within a MoviesProvider");
-  }
-  return ctx;
-}
 
 export default MoviesContext;

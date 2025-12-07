@@ -1,75 +1,75 @@
-# React + TypeScript + Vite
+# Directa Challenge – Movie Browser
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React App para ver y filtrar películas utilizando la API brindada por Directa.  
+El objetivo principal del proyecto fue construir una UI bonita, rápida y fácil de usar, tomando decisiones técnicas que optimicen la experiencia del usuario y la mantenibilidad del código.
 
-Currently, two official plugins are available:
+Stack principal
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React + Vite + TypeScript
+- TailwindCSS
+- shadcn/ui(componentes accesibles y tematizables)
+- Node/Express
 
-## React Compiler
+---
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Decision Making
 
-Note: This will impact Vite dev & build performances.
+1. Pre-carga completa de películas
 
-## Expanding the ESLint configuration
+La API está paginada, pero el dataset es pequeño (26 películas).  
+Por eso decidí, obtener todas las páginas al inicio, combinar los resultados en `allMovies`. Realizar todos los filtros en el cliente, en vez de tener que hacer un paginador, donde el sistema de filtros no funcionaria del todo correctamente sobre 10 items.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Ventajas:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Filtrado instantáneo sin llamadas adicionales.
+- Mejor experiencia de usuario.
+- Código más simple en el frontend.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. Proxy backend para evitar CORS
+
+La API no permite peticiones directas desde el navegador (CORS).  
+Para evitar workarounds men os prolijos, implementé un backend Express muy pequeño.
+
+---
+
+3. Tailwind + Shadcn por velocidad y consistencia
+
+Elegí estas tecs por varias razones:
+
+- Ya venía trabajando en un proyecto con estas tecnologías
+- Permite construir UI rápidamente manteniendo consistencia visual.
+- shadcn/ui trae componentes accesibles, tipados.
+- Tailwind para aumentar la velocidad de desarrollo con su sistema de classes inline.
+
+---
+
+4. Filtros con componentes reutilizables
+
+Los selectores de Año, Género, Director y Rated están construidos como componentes reutilizables:
+
+- opciones generadas dinámicamente desde los datos reales
+- UI similar a Letterboxd (hover dropdown)
+- filtrado en tiempo real en memoria
+
+Esto facilita extender la app sin cambiar la arquitectura.
+
+---
+
+Para levantar
+
+- Back:
+
+```bash
+  cd backend
+  npm install
+  npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Front:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+  npm install
+  npm run dev
 ```

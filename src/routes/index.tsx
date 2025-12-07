@@ -4,8 +4,9 @@ import { Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 
 const MainLayout = lazy(() => import("@/modules/layout/main-layout"));
-const HomePage = lazy(() => import("@/modules/movies/index"));
+const HomePage = lazy(() => import("@/modules/movies/pages/index"));
 const MovieDetail = lazy(() => import("@/modules/movies/pages/movie-detail"));
+// eslint-disable-next-line react-refresh/only-export-components
 export const routes: RouteObject[] = [
   {
     path: "/",
@@ -13,7 +14,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <HomePage /> },
       { path: "movie-detail", element: <MovieDetail /> },
-      { path: "*", element: <div className="p-6"> No encontrado</ div > },
+      { path: "*", element: <div className="p-6"> No encontrado</div> },
     ],
   },
 ];
@@ -21,8 +22,7 @@ export const routes: RouteObject[] = [
 export default function AppRoutes() {
   const element = useRoutes(routes);
   return (
-    <Suspense fallback={< div className="p-6" > Cargando…</div>
-    }>
+    <Suspense fallback={<div className="p-6"> Cargando…</div>}>
       {element}
     </Suspense>
   );
