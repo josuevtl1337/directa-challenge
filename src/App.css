@@ -4,18 +4,17 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
 :root {
-  --background: #121212; /* #121212 aprox */
+  --background: #121212; 
   --foreground: #fafafa;
 
   --card: #171717;
   --card-foreground: var(--foreground);
 
-  --primary: #74bd5e;
+  --primary: #3e83dd;
   --pay: rgb(219, 177, 38);
   --warning: rgb(219, 138, 38);
   --info: rgb(38, 162, 219);
@@ -34,7 +33,6 @@
   --muted: #262626;
   --muted-foreground:#b3b3b3;
 
-  /* --card-background: 10% 10% 10%; */
   --card-background: #0a0a0a;
   --card-border: #272727;
 
@@ -44,12 +42,10 @@
 }
 
 
-/* ===== 2) Mapear a Tailwind v4 (lo que usan bg-*, text-*, border-*) ===== */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
 
   --color-primary: var(--primary);

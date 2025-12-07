@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -39,69 +40,153 @@ const availableGenres = [
   "Family",
 ];
 
-const Filter = () => {
-  return (
-    <div className="flex justify-between mb-4">
-      <p className="text-2xl mb-4">FILMS</p>
+const availableDirectors = [
+  "Woody Allen",
+  "Quentin Tarantino",
+  "Martin Scorsese",
+  "Pedro Almodóvar",
+  "M. Night Shyamalan",
+  "Clint Eastwood",
+  "David Fincher",
+  "Steven Spielberg",
+  "Christopher Nolan",
+  "Robert Zemeckis",
+  "Damien Chazelle",
+];
 
-      <div className="flex flex-row  gap-4">
+const availableRatings = ["G", "PG", "PG-13", "R", "NC-17", "Not Rated"];
+
+interface IFilterProps {
+  onFilterChange: (filters: {
+    year: string | null;
+    genre: string | null;
+    director: string | null;
+    rated: string | null;
+  }) => void;
+}
+
+const Filter: React.FC<IFilterProps> = ({ onFilterChange }) => {
+  const [year, setYear] = useState<string | null>(null);
+  const [genre, setGenre] = useState<string | null>(null);
+  const [director, setDirector] = useState<string | null>(null);
+  const [rated, setRated] = useState<string | null>(null);
+
+  const handleFilterChange = (
+    filterType: "year" | "genre" | "director" | "rated",
+    value: string | null
+  ) => {
+    const newFilters = { year, genre, director, rated };
+
+    switch (filterType) {
+      case "year":
+        setYear(value);
+        newFilters.year = value;
+        break;
+      case "genre":
+        setGenre(value);
+        newFilters.genre = value;
+        break;
+      case "director":
+        setDirector(value);
+        newFilters.director = value;
+        break;
+      case "rated":
+        setRated(value);
+        newFilters.rated = value;
+        break;
+    }
+
+    onFilterChange(newFilters);
+  };
+
+  const handleResetFilters = () => {
+    setYear(null);
+    setGenre(null);
+    setDirector(null);
+    setRated(null);
+    onFilterChange({ year: null, genre: null, director: null, rated: null });
+  };
+
+  return (
+    <div className="flex justify-between mb-4 flex-col md:flex-row gap-4">
+      <p className="text-xl font-semibold text-slate-100">FILMS</p>
+
+      <div className="flex flex-row gap-4 flex-wrap">
         {/* YEAR */}
-        <Select>
-          <SelectTrigger className="w-[180px]">
+        <Select
+          value={year || ""}
+          onValueChange={(value) => handleFilterChange("year", value || null)}
+        >
+          <SelectTrigger className="w-[180px] bg-slate-800 border-slate-700">
             <SelectValue placeholder="Year" />
           </SelectTrigger>
           <SelectContent>
-            {availableYears.map((year) => (
-              <SelectItem key={year} value={year}>
-                {year}
+            {availableYears.map((yr) => (
+              <SelectItem key={yr} value={yr}>
+                {yr}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
 
         {/* GENRE */}
-        <Select>
-          <SelectTrigger className="w-[180px]">
+        <Select
+          value={genre || ""}
+          onValueChange={(value) => handleFilterChange("genre", value || null)}
+        >
+          <SelectTrigger className="w-[180px] bg-slate-800 border-slate-700">
             <SelectValue placeholder="Genre" />
           </SelectTrigger>
           <SelectContent>
-            {availableGenres.map((genre) => (
-              <SelectItem key={genre} value={genre}>
-                {genre}
+            {availableGenres.map((gen) => (
+              <SelectItem key={gen} value={gen}>
+                {gen}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
 
         {/* DIRECTOR */}
-        <Select>
-          <SelectTrigger className="w-[180px]">
+        <Select
+          value={director || ""}
+          onValueChange={(value) =>
+            handleFilterChange("director", value || null)
+          }
+        >
+          <SelectTrigger className="w-[180px] bg-slate-800 border-slate-700">
             <SelectValue placeholder="Director" />
           </SelectTrigger>
           <SelectContent>
-            {availableGenres.map((genre) => (
-              <SelectItem key={genre} value={genre}>
-                {genre}
+            {availableDirectors.map((gen) => (
+              <SelectItem key={gen} value={gen}>
+                {gen}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
 
         {/* RATED */}
-        <Select>
-          <SelectTrigger className="w-[180px]">
+        <Select
+          value={rated || ""}
+          onValueChange={(value) => handleFilterChange("rated", value || null)}
+        >
+          <SelectTrigger className="w-[180px] bg-slate-800 border-slate-700">
             <SelectValue placeholder="Rated" />
           </SelectTrigger>
           <SelectContent>
-            {availableGenres.map((genre) => (
-              <SelectItem key={genre} value={genre}>
-                {genre}
+            {availableRatings.map((rate) => (
+              <SelectItem key={rate} value={rate}>
+                {rate}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
 
-        <Button className="ml-4 p-1 bg-blue-500 text-white rounded">
+        {/* RESET BUTTON */}
+        <Button
+          onClick={handleResetFilters}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors"
+        >
           Reset Filters
         </Button>
       </div>
