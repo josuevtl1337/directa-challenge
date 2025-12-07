@@ -46,12 +46,7 @@ const availableDirectors = [
   "Martin Scorsese",
   "Pedro Almodóvar",
   "M. Night Shyamalan",
-  "Clint Eastwood",
-  "David Fincher",
-  "Steven Spielberg",
-  "Christopher Nolan",
-  "Robert Zemeckis",
-  "Damien Chazelle",
+  "Clint Eastwood"
 ];
 
 const availableRatings = ["G", "PG", "PG-13", "R", "NC-17", "Not Rated"];

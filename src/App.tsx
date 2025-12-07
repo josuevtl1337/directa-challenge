@@ -1,11 +1,15 @@
 import "./App.css";
-import MoviesPage from "./movies";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes";
+import { MoviesProvider } from "./context/MoviesContext";
 
 function App() {
   return (
-    <div className="App">
-      <MoviesPage />
-    </div>
+    <BrowserRouter>
+      <MoviesProvider>
+        <AppRoutes />
+      </MoviesProvider>
+    </BrowserRouter>
   );
 }
 

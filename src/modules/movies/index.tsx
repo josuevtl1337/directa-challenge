@@ -1,6 +1,7 @@
 import type { Movie } from "./types/movies";
 import Filter from "./components/filter";
 import { useAllMovies } from "./hooks/useAllMovies";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -13,6 +14,7 @@ import SearchBar from "./components/search-bar";
 import { useState } from "react";
 
 const MoviesPage = () => {
+  const navigate = useNavigate();
   const { allMovies, isLoading, isError } = useAllMovies();
   console.log("allMovies:", allMovies);
   const [filters, setFilters] = useState({
@@ -65,43 +67,28 @@ const MoviesPage = () => {
     );
   }
 
+  const goToDetailPage = (movie: Movie) => {
+    navigate("/movie-detail", { state: { movie } });
+  }
+
   return (
     <div className="min-h-screen bg-linear-to-r from-slate-950 via-slate-900 to-slate-950 opacity-95 relative z-10">
-      <div className="border-b border-slate-800 sticky top-0 z-50 backdrop-blur-md bg-slate-950/80">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex flex-row justify-between items-center gap-4">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                Directa Challenge
-              </h1>
-              <p className="text-slate-400 text-sm mt-1">
-                This is <b>NOT</b> a copy from letterboxd
-              </p>
-            </div>
-
-            <div className="w-full max-w-xs">
-              <SearchBar onSearchChange={handleSearchChange} />
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-8">
+          <SearchBar onSearchChange={handleSearchChange} />
           <Filter onFilterChange={handleFilterChange} />
         </div>
 
         <div className="mb-8 p-4 bg-linear-to-r from-blue-600/20 to-cyan-600/20 border border-blue-500/30 rounded-lg backdrop-blur-sm">
           <p className="text-slate-200 font-medium">
-            {`🎬  ${allMovies.length} film${
-              allMovies.length !== 1 ? "s" : ""
-            } found`}
+            {`🎬  ${filteredMovies.length} film${allMovies.length !== 1 ? "s" : ""
+              } found`}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="w-full lg:min-w-300 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredMovies?.map((movie, i) => (
-            <MoviesCard key={i} movieDetail={movie} />
+            <MoviesCard key={i} movieDetail={movie} onClick={goToDetailPage} />
           ))}
         </div>
       </div>
@@ -111,15 +98,16 @@ const MoviesPage = () => {
 
 type MoviesCardProps = {
   movieDetail: Movie;
+  onClick?: (movie: Movie) => void;
 };
 
-const MoviesCard = ({ movieDetail }: MoviesCardProps) => {
+const MoviesCard = ({ movieDetail, onClick }: MoviesCardProps) => {
   const trimGenres = movieDetail.Genre
     ? movieDetail.Genre.split(",").map((g) => g.trim())
     : [];
 
   return (
-    <Card className="group min-h-[420px] flex flex-col justify-between rounded-xl overflow-hidden bg-linear-to-b from-slate-800 to-slate-900 border border-slate-700 hover:border-blue-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-1 cursor-pointer">
+    <Card className="group min-h-[420px] flex flex-col justify-between rounded-xl overflow-hidden bg-linear-to-b from-slate-800 to-slate-900 border border-slate-700 hover:border-blue-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-1 cursor-pointer" onClick={() => onClick?.(movieDetail)}>
       <div className="relative overflow-hidden h-32 bg-linear-to-r from-blue-600/20 to-cyan-600/20 flex items-center justify-center">
         <div className="absolute inset-0 bg-linear-to-r from-blue-500/10 to-transparent group-hover:from-blue-500/20 transition-all duration-300"></div>
         <span className="text-6xl opacity-20 group-hover:opacity-30 transition-opacity">

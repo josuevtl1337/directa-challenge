@@ -1,14 +1,22 @@
-import { useEffect, useState } from 'react';
-import { fetchMoviesPage } from '../api/movies';
-import type { Movie } from '../types/movies';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { fetchMoviesPage } from "../modules/movies/api/movies";
+import type { Movie, MoviesApiResponse } from "../modules/movies/types/movies";
 
-interface UseAllMoviesResult {
+type MoviesState = {
   allMovies: Movie[];
   isLoading: boolean;
   isError: string | null;
-}
+};
 
-export function useAllMovies(): UseAllMoviesResult {
+const defaultState: MoviesState = {
+  allMovies: [],
+  isLoading: true,
+  isError: null,
+};
+
+const MoviesContext = createContext<MoviesState | undefined>(undefined);
+
+export const MoviesProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState<string | null>(null);
@@ -29,7 +37,7 @@ export function useAllMovies(): UseAllMoviesResult {
         const totalPages = firstPage.total_pages;
 
         if (totalPages > 1) {
-          const pagesToFetch = [];
+          const pagesToFetch: Promise<MoviesApiResponse>[] = [];
 
           for (let page = 2; page <= totalPages; page++) {
             pagesToFetch.push(fetchMoviesPage(page));
@@ -46,12 +54,10 @@ export function useAllMovies(): UseAllMoviesResult {
         setAllMovies(movies);
       } catch (err) {
         if (!cancelled) {
-          setIsError(err instanceof Error ? err.message : 'unknown');
+          setIsError(err instanceof Error ? err.message : String(err));
         }
       } finally {
-        if (!cancelled) {
-          setIsLoading(false);
-        }
+        if (!cancelled) setIsLoading(false);
       }
     }
 
@@ -62,5 +68,19 @@ export function useAllMovies(): UseAllMoviesResult {
     };
   }, []);
 
-  return { allMovies, isLoading, isError };
+  return (
+    <MoviesContext.Provider value={{ allMovies, isLoading, isError }}>
+      {children}
+    </MoviesContext.Provider>
+  );
+};
+
+export function useMoviesContext() {
+  const ctx = useContext(MoviesContext);
+  if (!ctx) {
+    throw new Error("useMoviesContext must be used within a MoviesProvider");
+  }
+  return ctx;
 }
+
+export default MoviesContext;
