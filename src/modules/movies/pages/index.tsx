@@ -9,7 +9,7 @@ import MoviesCard from "../components/movie-card";
 const MoviesPage = () => {
   const navigate = useNavigate();
   const { allMovies, isLoading, isError } = useAllMovies();
-  console.log("allMovies:", allMovies);
+
   const [filters, setFilters] = useState({
     year: null as string | null,
     genre: null as string | null,
@@ -44,7 +44,7 @@ const MoviesPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen min-h-screen w-full bg-linear-to-r from-slate-950 via-slate-900 to-slate-950 opacity-95 px-6 py-8">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
@@ -73,9 +73,8 @@ const MoviesPage = () => {
 
       <div className="mb-8 p-4 bg-linear-to-r from-blue-600/20 to-cyan-600/20 border border-blue-500/30 rounded-lg backdrop-blur-sm">
         <p className="text-slate-200 font-medium">
-          {`🎬  ${filteredMovies.length} film${
-            allMovies.length !== 1 ? "s" : ""
-          } found`}
+          {`🎬  ${filteredMovies.length} film${allMovies.length !== 1 ? "s" : ""
+            } found`}
         </p>
       </div>
 

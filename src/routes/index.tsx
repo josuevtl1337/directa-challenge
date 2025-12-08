@@ -14,7 +14,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <HomePage /> },
       { path: "movie-detail", element: <MovieDetail /> },
-      { path: "*", element: <div className="p-6"> No encontrado</div> },
+      { path: "*", element: <div className="p-6"> Not found</div> },
     ],
   },
 ];
@@ -22,7 +22,9 @@ export const routes: RouteObject[] = [
 export default function AppRoutes() {
   const element = useRoutes(routes);
   return (
-    <Suspense fallback={<div className="p-6"> Cargando…</div>}>
+    <Suspense fallback={<div className="flex items-center justify-center h-screen w-full min-h-screen w-full bg-linear-to-r from-slate-950 via-slate-900 to-slate-950 opacity-95 px-6 py-8">
+      <div className="animate-spin rounded-full h-24 w-24 border-b-2 border-primary"></div>
+    </div>}>
       {element}
     </Suspense>
   );

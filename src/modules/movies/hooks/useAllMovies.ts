@@ -1,5 +1,5 @@
 import type { Movie } from '../types/movies';
-import { useMoviesContext } from '../../../context/MoviesContext';
+import { useMoviesContext } from '../../../context/useMoviesContext';
 
 interface UseAllMoviesResult {
   allMovies: Movie[];
